@@ -1,47 +1,58 @@
+#include <stdio.h>
 #include "variadic_functions.h"
-
+int _strlen(const char *s);
 /**
- * print_all - prints anything
- * @format: String containing format of the corresponding argument
- *
+ * print_all - function that prints anything.
+ * @format:  list of types of args.
+ */
+void print_all(const char *const format, ...)
+{
+	va_list args;
+	int bi = 0;
+
+	va_start(args, format);
+
+	while (format[bi])
+	{
+		switch (format[bi])
+		{
+		case 'c':
+			printf("%c", va_arg(args, int));
+			break;
+		case 'i':
+			printf("%d", va_arg(args, int));
+			break;
+		case 'f':
+			printf("%f", va_arg(args, double));
+			break;
+		case 's':
+			printf("%s", va_arg(args, char *));
+			break;
+		default:
+			bi++;
+			continue;
+		}
+		if (bi != _strlen(format) - 1)
+			printf(", ");
+		bi++;
+	}
+	printf("\n");
+	va_end(args);
+}
+/**
+ *  _strlen -  calculates the length of a string.
+ * @s: pointer to a string.
+ * Return: lenght.
  */
 
-void print_all(const char * const format, ...)
+int _strlen(const char *s)
 {
-	va_list strings;
-	char *str, *separator = "";
-	unsigned int i = 0;
+	int lenght = 0;
 
-	va_start(strings, format);
-	while (format && format[i])
+	while (*s != '\0')
 	{
-		switch (format[i])
-		{
-			case 'c':
-				printf("%s%c", separator, va_arg(strings, int));
-				break;
-			case 'i':
-				printf("%s%d", separator, va_arg(strings, int));
-				break;
-			case 'f':
-				printf("%s%f", separator, va_arg(strings, double));
-				break;
-			case 's':
-				str = va_arg(strings, char *);
-				if (str)
-				{
-					printf("%s%s", separator, str);
-					break;
-				}
-				printf(", (nil)");
-				break;
-			default:
-				i++;
-				continue;
-		}
-		separator = ", ";
-		i++;
+		lenght++;
+		s++;
 	}
-	va_end(strings);
-	printf("\n");
+	return (lenght);
 }
