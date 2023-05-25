@@ -9,10 +9,11 @@ void print_all(const char *const format, ...)
 {
 	va_list args;
 	int bi = 0;
+	char *s;
 
 	va_start(args, format);
 
-	while (format[bi])
+	while (format && format[bi])
 	{
 		switch (format[bi])
 		{
@@ -26,7 +27,11 @@ void print_all(const char *const format, ...)
 			printf("%f", va_arg(args, double));
 			break;
 		case 's':
-			printf("%s", va_arg(args, char *));
+			s = (va_arg(args, char *));
+			if (s == NULL)
+				s = "(nil)";
+
+			printf("%s", s);
 			break;
 		default:
 			bi++;
